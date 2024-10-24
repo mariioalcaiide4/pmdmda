@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void pulsado3 (View view) {
         Toast.makeText(getApplicationContext(), "Has hecho clic en el botón 3", Toast.LENGTH_SHORT).show();
+        Log.i("EJEMPLO", "Boton pulsado");
+        Intent activity = new Intent(this, MainActivity4.class);
+        startActivity(activity);
     }
 
     public void pulsado4 (View view) {
