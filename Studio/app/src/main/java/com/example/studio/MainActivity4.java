@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,20 @@ public class MainActivity4 extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
+
+    RadioGroup miGrupo = (RadioGroup) findViewById(R.id.radio1);
+        miGrupo.clearCheck();
+        miGrupo.check(R.id.radio1);
+        int idMarcado = miGrupo.getCheckedRadioButtonId();
+        Log.i("RadioGroup", "RadioButton seleccionado: " + idMarcado);
+
+        miGrupo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            //Código para realizar
+        }
+    });
+}
+
 
     public void rotar1(View view1) {
         Log.i("EJEMPLO", "Boton pulsado");

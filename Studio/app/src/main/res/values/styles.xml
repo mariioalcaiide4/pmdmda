@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EstiloRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressTint">#00FF04</item>
+    </style>
+
+    <style name="EstiloBarraSeek" parent="Widget.AppCompat.SeekBar.Discrete">
+        <item name="android:progressTint">#F700FF</item>
+        //android:thumbTint
+        <item name="android:progressBackgroundTint">#000000</item>
+    </style>
+
+    <style name="EstiloBarraProgresoCircular" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateTint">#2B60FF</item>
+        <item name="android:indeterminate">true</item> <!-- Activar el modo indeterminado -->
+    </style>
+
+    <style name="EstiloBarraProgresoHorizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminateTint">#2B60FF</item>
+        <item name="android:indeterminate">true</item> <!-- Activar el modo indeterminado -->
+    </style>
+</resources>
