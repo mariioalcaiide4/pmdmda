@@ -32,7 +32,7 @@ public class MainActivity4 extends AppCompatActivity {
             return insets;
         });
 
-    RadioGroup miGrupo = (RadioGroup) findViewById(R.id.radio1);
+        RadioGroup miGrupo = (RadioGroup) findViewById(R.id.radio1);
         miGrupo.clearCheck();
         miGrupo.check(R.id.radio1);
         int idMarcado = miGrupo.getCheckedRadioButtonId();
@@ -41,9 +41,9 @@ public class MainActivity4 extends AppCompatActivity {
         miGrupo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             //Código para realizar
-        }
-    });
-}
+         }
+     });
+    }
 
 
     public void rotar1(View view1) {
