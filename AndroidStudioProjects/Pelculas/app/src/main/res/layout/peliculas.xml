@@ -1,0 +1,45 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/main"
+        android:orientation="horizontal"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/tituloPelicula"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título"/>
+
+        <TextView
+            android:id="@+id/directorPelicula"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Género"/>
+        <TextView
+            android:id="@+id/generoPelicula"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Director"/>
+        <TextView
+            android:id="@+id/premiosPeliculas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Premios"/>
+        <RatingBar
+            android:id="@+id/valoracionPeliculas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:layout_marginTop="4dp"
+            android:progressTint="#001EFF"/>
+    </LinearLayout>
+</FrameLayout>
