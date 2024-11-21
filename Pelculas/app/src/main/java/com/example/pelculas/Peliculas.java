@@ -2,29 +2,29 @@ package com.example.pelculas;
 
 public class Peliculas {
 
-    String titulo;
+    int imagen;
+    String nombre;
     String director;
-    String genero;
-    int premios;
-    float calificacion;
+    String resumen;
+    float valoracion;
 
     //Constructor por defecto
 
-    public Peliculas(String titulo, String director, String genero, int premios, float calificacion){
+    public Peliculas(int imagen, String nombre, String director, String resumen, float valoracion){
 
-        this.titulo = titulo;
+        this.imagen = imagen;
+        this.nombre = nombre;
         this.director = director;
-        this.genero = genero;
-        this.premios = premios;
-        this.calificacion = calificacion;
+        this.resumen = resumen;
+        this.valoracion = valoracion;
     }
 
     //Getters
 
-    public String getTitulo(){return titulo;}
+    public int getImagenResId() { return imagen; }
+    public String getNombre(){return nombre;}
     public String getDirector(){return director;}
-    public String getGenero(){return genero;}
-    public int getPremios(){return premios;}
-    public float getCalificacion(){return calificacion;}
+    public String getResumen(){return resumen;}
+    public float getValoracion(){return valoracion;}
 
 }
