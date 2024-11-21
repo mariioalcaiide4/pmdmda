@@ -1,4 +1,4 @@
-package com.example.pelculas;
+package com.example.peliculas;
 
 import android.os.Bundle;
 import android.widget.ListView;
@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.pelculas.R;
+
 import java.util.ArrayList;
 import java.util.List;
 

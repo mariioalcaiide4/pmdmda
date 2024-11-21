@@ -1,4 +1,4 @@
-package com.example.pelculas;
+package com.example.peliculas;
 
 import android.content.Context;
 

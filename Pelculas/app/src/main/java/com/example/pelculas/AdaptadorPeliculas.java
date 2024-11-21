@@ -1,4 +1,4 @@
-package com.example.pelculas;
+package com.example.peliculas;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.pelculas.Peliculas;
 import com.example.pelculas.R;
 
 import java.util.List;
