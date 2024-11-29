@@ -28,4 +28,9 @@
     <style name="EditView">
         <item name="android:background">#FFFFFF</item>
     </style>
+    <style name="ColourButton">
+        <item name="android:backgroundTint"></item>
+
+
+    </style>
 </resources>

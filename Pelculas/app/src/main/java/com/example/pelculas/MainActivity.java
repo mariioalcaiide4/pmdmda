@@ -1,110 +1,118 @@
 package com.example.pelculas;
 
-import android.content.Intent;
+
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ListView;
-import androidx.activity.EdgeToEdge;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView listView;
-    private AdaptadorPeliculas adapter;
-    private List<Peliculas> listaPelis;
+
+    private final HashMap<String, String> validUsers = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this); // Configura el modo Edge-to-Edge
-        setContentView(R.layout.activity_main); // Layout principal (asegúrate que este archivo exista y sea el correcto)
+        setContentView(R.layout.activity_main2); // Asegúrate de que activity_main3.xml existe y es válido.
 
-        // Inicializa el ListView
-        listView = findViewById(R.id.listView);
+        // Configuración Edge-to-Edge
+        View mainView = findViewById(R.id.main); // Asegúrate de que el ID "main" existe en activity_main3.xml
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return WindowInsetsCompat.CONSUMED; // Consumir insets si no deseas que continúe propagándose.
+            });
+        }
 
-        // Crea una lista de elementos (películas)
-        listaPelis = new ArrayList<>();
-        listaPelis.add(new Peliculas(R.drawable.it2, "IT", "Andrés Muschietti", "Varios niños de una pequeña ciudad del estado de Maine se alían para combatir a una entidad diabólica que adopta la forma de un payaso.", 3.0f));
-        listaPelis.add(new Peliculas(R.drawable.loimposible, "Lo Imposible", "Juan Antonio Bayona", "Un tsunami destroza la costa del sudeste asiático, y una familia lucha por reencontrarse.", 4.0f));
-        listaPelis.add(new Peliculas(R.drawable.ryan2, "Salvar al Soldado Ryan", "Steven Spielberg", "Soldados americanos arriesgan sus vidas para salvar al soldado James Ryan.", 4.5f));
-        listaPelis.add(new Peliculas(R.drawable.resacon, "Resacón en Las Vegas", "Todd Phillips", "Cuatro amigos intentan resolver lo ocurrido en una alocada despedida de soltero.", 5.0f));
-        listaPelis.add(new Peliculas(R.drawable.monstruo, "Un monstruo viene a verme", "Juan Antonio Bayona", "Un niño enfrenta sus miedos con la ayuda de un monstruo.", 4.0f));
+        validUsers.put("mariioalcaide4", "1234");
+        validUsers.put("teresita", "teresita");
+        validUsers.put("prueba", "prueba");
 
-        // Configura el adaptador para el ListView
-        adapter = new AdaptadorPeliculas(this, listaPelis);
-        listView.setAdapter(adapter);
+        EditText usernameField = findViewById(R.id.textUsuario);
+        EditText passwordField = findViewById(R.id.textContraseña);
+        Button loginButton = findViewById(R.id.buttonSubmit);
 
-        // Configuración para el padding del sistema (opcional, si se necesita)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Infla el menú desde el archivo XML
-        getMenuInflater().inflate(R.menu.menu, menu); // Asegúrate de que el archivo XML se llame 'menu.xml'
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-            if (id == R.id.opcion1) {
-                ordenarPorValoracionDesc();
-                return true;
+        ImageView imageView = findViewById(R.id.fondo);
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.fytq)
+                .into(imageView);
 
-            } else if (id == R.id.opcion2) {
-                ordenarPorValoracionAsc();
-                return true;
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = usernameField.getText().toString();
+                String password = passwordField.getText().toString();
 
-            } else if (id == R.id.opcion3) {
-                ordenarPorDirector();
-                return true;
-            } else {
-        return super.onOptionsItemSelected(item);
+                if(us)
+
+
+
             }
-    }
+        });
 
-    // Ordenar de mayor a menor valoración
-    private void ordenarPorValoracionDesc() {
-        listaPelis.sort((p1, p2) -> Float.compare(p2.getValoracion(), p1.getValoracion())); // Descendente
-        adapter.notifyDataSetChanged(); // Actualiza el adaptador
-    }
 
-    // Ordenar de menor a mayor valoración
-    private void ordenarPorValoracionAsc() {
-        listaPelis.sort((p1, p2) -> Float.compare(p1.getValoracion(), p2.getValoracion())); // Ascendente
-        adapter.notifyDataSetChanged(); // Actualiza el adaptador
-    }
 
-    // Ordenar por director (alfabéticamente)
-    private void ordenarPorDirector() {
-        listaPelis.sort((p1, p2) -> p1.getDirector().compareToIgnoreCase(p2.getDirector())); // Orden alfabético por director
-        adapter.notifyDataSetChanged(); // Actualiza el adaptador
-    }
 
-    private void ordenarPorLetra(){
-        listaPelis.sort((p1, p2) -> p1.getNombre().compareToIgnoreCase(p2.getNombre()));
-        adapter.notifyDataSetChanged();
     }
-
-    private void añadirPelicula(){
-        Log.i("Añadir", "Crear película");
-        Intent ventanaAñadir = new Intent(this, MainActivity3.class);
-        startActivity(ventanaAñadir);
-    }
-
 }
 
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Añade usuarios y contraseñas
+        // Habrá que hacer un método para añadir usuarios y contraseñas
+        validUsers.put("olallalnc", "Towel4");
+        validUsers.put("inigolnc", "inigoFeo234");
+        validUsers.put("bertabl", "huerta177");
+        validUsers.put("paolabl", "pacoula1011");
+
+        // Referencias a los elementos de la interfaz
+        EditText usernameField = findViewById(R.id.usuario);
+        EditText passwordField = findViewById(R.id.contrasenia);
+        Button loginButton = findViewById(R.id.entrarButton);
+
+        // Pulsar el botón de validación
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameField.getText().toString();
+                String password = passwordField.getText().toString();
+
+                if (isValidUser(username, password)) {
+                    Toast.makeText(MainActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+
+                    // Vamos a la actividad de la lista de la ropa
+                    Intent intent = new Intent(MainActivity.this, ListaElementos.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+    }
+
+    // Validación de usuarios
+    private boolean isValidUser(String username, String password) {
+        return validUsers.containsKey(username) && validUsers.get(username).equals(password);
+    }
+
+}
