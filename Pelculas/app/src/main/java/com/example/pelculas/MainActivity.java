@@ -1,11 +1,14 @@
 package com.example.pelculas;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -56,58 +59,17 @@ public class MainActivity extends AppCompatActivity {
                 String username = usernameField.getText().toString();
                 String password = passwordField.getText().toString();
 
-                if(us)
-
-
-
-            }
-        });
-
-
-
-
-    }
-}
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Añade usuarios y contraseñas
-        // Habrá que hacer un método para añadir usuarios y contraseñas
-        validUsers.put("olallalnc", "Towel4");
-        validUsers.put("inigolnc", "inigoFeo234");
-        validUsers.put("bertabl", "huerta177");
-        validUsers.put("paolabl", "pacoula1011");
-
-        // Referencias a los elementos de la interfaz
-        EditText usernameField = findViewById(R.id.usuario);
-        EditText passwordField = findViewById(R.id.contrasenia);
-        Button loginButton = findViewById(R.id.entrarButton);
-
-        // Pulsar el botón de validación
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = usernameField.getText().toString();
-                String password = passwordField.getText().toString();
-
                 if (isValidUser(username, password)) {
-                    Toast.makeText(MainActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
+                    Toast.makeText(MainActivity.this, "¡Bienvenido!", Toast.LENGTH_SHORT).show();
                     // Vamos a la actividad de la lista de la ropa
-                    Intent intent = new Intent(MainActivity.this, ListaElementos.class);
+                    Intent intent = new Intent(MainActivity.this, MainActivity4.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(MainActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
     }
 
     // Validación de usuarios
