@@ -27,14 +27,6 @@
         tools:layout_editor_absoluteX="55dp"
         tools:layout_editor_absoluteY="124dp" />
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="478dp"
-        android:layout_height="211dp"
-        android:src="@drawable/logo"
-        tools:layout_editor_absoluteX="-34dp"
-        tools:layout_editor_absoluteY="177dp" />
-
     <EditText
         android:id="@+id/textUsuario"
         style="@style/EditView"

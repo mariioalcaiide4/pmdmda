@@ -1,6 +1,8 @@
 package com.example.pelculas;
 
-public class Peliculas {
+import java.io.Serializable;
+
+public class Peliculas implements Serializable {
 
     int imagen;
     String nombre;
@@ -26,5 +28,14 @@ public class Peliculas {
     public String getDirector(){return director;}
     public String getResumen(){return resumen;}
     public float getValoracion(){return valoracion;}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Peliculas) {
+            Peliculas other = (Peliculas) obj;
+            return nombre.equals(other.nombre); // Comparar por nombre
+        }
+        return false;
+    }
 
 }

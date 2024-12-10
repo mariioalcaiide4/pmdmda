@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".MainActivity4">
         </activity>
-        <activity android:name=".MainActivity3">
+        <activity android:name=".Formulario">
         </activity>
     </application>
 

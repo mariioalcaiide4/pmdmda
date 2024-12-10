@@ -1,63 +1,70 @@
-<FrameLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
-
-<LinearLayout
-    android:id="@+id/main"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
-
-    <ImageView
-        android:id="@+id/imagen"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:scaleType="centerInside"/>
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
-        <TextView
-            android:id="@+id/nombrePelicula"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            style="@style/BoldTextView"
-            android:text="Nombre" />
+        <ImageView
+            android:id="@+id/imagen"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"/>
 
-        <TextView
-            android:id="@+id/directorPelicula"
-            android:layout_width="wrap_content"
-            android:textSize="15sp"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/ItalicListView"
-            android:text="Director" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/breveResumenPeliculas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            style="@style/DescriptionView"
-            android:text="Resumen" />
+            <TextView
+                android:id="@+id/nombrePelicula"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_height="wrap_content"
+                style="@style/BoldTextView"
+                android:text="Nombre" />
 
-        <RatingBar
-            android:id="@+id/valoracionPeliculas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="0.5"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
-            android:layout_marginTop="4dp"
-            android:progressTint="#001EFF" />
+            <TextView
+                android:id="@+id/directorPelicula"
+                android:layout_width="wrap_content"
+                android:textSize="15sp"
+                android:layout_height="wrap_content"
+                style="@style/ItalicListView"
+                android:text="Director" />
+
+            <TextView
+                android:id="@+id/breveResumenPeliculas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                style="@style/DescriptionView"
+                android:text="Resumen" />
+
+            <RatingBar
+                android:id="@+id/valoracionPeliculas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:layout_marginTop="4dp"
+                android:progressTint="#001EFF" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/menu_pelicula"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Menú de opciones"
+            android:src="@android:drawable/ic_menu_more" />
     </LinearLayout>
-</LinearLayout>
 </FrameLayout>
