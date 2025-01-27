@@ -19,8 +19,6 @@ public class MainActivity4 extends AppCompatActivity {
     private ListView listView;
     private AdaptadorPeliculas adapter;
     private List<Peliculas> listaPelis;
-    private DatabaseHelper dbHelper;
-    private static final int REQUEST_CODE_ADD_MOVIE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +27,6 @@ public class MainActivity4 extends AppCompatActivity {
 
         // Inicializa el ListView
         listView = findViewById(R.id.listView);
-
-        // Inicializa el DatabaseHelper
-        dbHelper = new DatabaseHelper(this);
-
-        // Recuperar datos de la base de datos
-        listaPelis = dbHelper.getAllPeliculas();
 
         // Configura el adaptador para el ListView
         adapter = new AdaptadorPeliculas(this, listaPelis);
@@ -63,27 +55,6 @@ public class MainActivity4 extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {
-            Peliculas nuevaPelicula = (Peliculas) data.getSerializableExtra("nuevaPelicula");
-
-            if (nuevaPelicula != null) {
-                Log.d("MainActivity4", "Película recibida: " + nuevaPelicula.getNombre());
-
-                // Añadir la película a la base de datos
-                dbHelper.insertPelicula(nuevaPelicula);
-
-                // Actualizar la lista desde la base de datos
-                listaPelis.clear();
-                listaPelis.addAll(dbHelper.getAllPeliculas());
-                adapter.notifyDataSetChanged();
-                Toast.makeText(this, "Elemento añadido con éxito.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     private void ordenarPorValoracionDesc() {
         listaPelis.sort((p1, p2) -> Float.compare(p2.getValoracion(), p1.getValoracion()));
