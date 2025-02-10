@@ -8,8 +8,13 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,20 +55,22 @@ public class MainActivity4 extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.opcion1) {
-            // Ordenar por valoración descendente
             ordenarPorValoracionDesc();
             return true;
         } else if (id == R.id.opcion2) {
-            // Ordenar por valoración ascendente
             ordenarPorValoracionAsc();
             return true;
         } else if (id == R.id.opcion3) {
-            // Ordenar por director
             ordenarPorDirector();
+            return true;
+        } else if (id == R.id.info) { // Nueva opción en el menú
+            String contenidoInfo = leerArchivoTexto(R.raw.info);
+            mostrarDialogoInfo(contenidoInfo);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -106,4 +113,30 @@ public class MainActivity4 extends AppCompatActivity {
         listaPelis.sort((p1, p2) -> p1.getDirector().compareToIgnoreCase(p2.getDirector())); // Orden alfabético por director
         adapter.notifyDataSetChanged();
     }
+
+    // Método para leer el archivo de texto desde res/raw
+    private String leerArchivoTexto(int resId) {
+        StringBuilder contenido = new StringBuilder();
+        try (InputStream inputStream = getResources().openRawResource(resId);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                contenido.append(linea).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error al leer el archivo.";
+        }
+        return contenido.toString();
+    }
+
+    private void mostrarDialogoInfo(String contenido) {
+        new AlertDialog.Builder(this)
+                .setTitle("Información de la App")
+                .setMessage(contenido)
+                .setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
 }

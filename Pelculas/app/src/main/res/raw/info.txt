@@ -1,0 +1,12 @@
+La aplicación trata de un portal de películas donde los usuarios podrán
+ver diferentes películas con sus resumenes y su información para fomentar
+la industria del cine y hacer mas sencillo la elección de que ver en una noche
+de pelis y manta. La aplicación tiene las siguientes funcionalidades:
+
+- Añadir, editar y eliminar películas 
+
+- Ordenador por filtros como género, director, mayor valoración y demás
+
+- PROXIMAMENTE: Ver el trailer de la aplicación
+
+- PROXIMAMENTE: Una sección de comentarios y reseñas para cada película
