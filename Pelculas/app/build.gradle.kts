@@ -32,13 +32,12 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.glide)
-    annotationProcessor(libs.glide.compiler)
+    implementation(libs.glide)  // YA INCLUYE GLIDE
+    annotationProcessor(libs.glide.compiler)  // YA INCLUYE EL COMPILADOR
     implementation(libs.gifdrawable)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
