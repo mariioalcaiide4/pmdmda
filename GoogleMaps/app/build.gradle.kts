@@ -47,7 +47,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation ("com.google.firebase:firebase-firestore:24.8.1")
     implementation ("com.google.android.gms:play-services-maps:18.1.0") // Comilla agregada al final
-
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.android.volley:volley:1.2.1")
 }
 
 buildscript {
