@@ -64,13 +64,10 @@ public class MainActivity4 extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD
-=======
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
->>>>>>> 7ebd9fa258010fb9ce6e22456971748173e82513
+
 
     private void ordenarPorValoracionDesc() {
         listaPelis.sort((p1, p2) -> Float.compare(p2.getValoracion(), p1.getValoracion()));
@@ -87,8 +84,6 @@ public class MainActivity4 extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-<<<<<<< HEAD
-=======
     // Método para leer el archivo de texto desde res/raw
     private String leerArchivoTexto(int resId) {
         StringBuilder contenido = new StringBuilder();
@@ -112,9 +107,6 @@ public class MainActivity4 extends AppCompatActivity {
                 .setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss())
                 .show();
     }
-
-
->>>>>>> 7ebd9fa258010fb9ce6e22456971748173e82513
 }
 
 

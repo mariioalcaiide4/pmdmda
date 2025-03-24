@@ -1,136 +1,73 @@
 package com.example.googlemaps;
 
-import android.location.Location;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.Manifest;
-import android.os.Looper;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.googlemaps.databinding.ActivityMapsBinding;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
-    private ActivityMapsBinding binding;
-    private FirebaseFirestore db;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private FusedLocationProviderClient fusedLocationClient;
-    private LocationCallback locationCallback;
-    private EditText searchBar;
-    private Button searchButton, toggleMapButton;
-    private boolean isSatelliteView = false;
-    private List<Marker> markers = new ArrayList<>();
-    private static final String FOURSQUARE_API_KEY = "fsq3krnsJZuNgz0Ax282ItJ5zWngJH6woxxFsCmJ/VzBK2Y=";
-
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private GoogleMap mapaGoogle;
+    private EditText campoBusqueda;
+    private Button botonBuscar, botonTipoMapa;
+    private FusedLocationProviderClient clienteUbicacion;
+    private Marker marcadorUbicacion;
+    private static final String CLAVE_API = "AIzaSyBFe3cMarZMD9rtT3OQZHgtY06IoV2ZtNE";
+    private List<Marker> listaMarcadores = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        SupportMapFragment fragmentoMapa = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (fragmentoMapa != null) {
+            fragmentoMapa.getMapAsync(this);
+        }
 
-        db = FirebaseFirestore.getInstance();
+        campoBusqueda = findViewById(R.id.search_bar);
+        botonBuscar = findViewById(R.id.search_button);
+        botonTipoMapa = findViewById(R.id.toggle_map_button);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        requestLocationPermission();
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                        Log.d("UBICACION", "Ubicación en tiempo real: " + location.getLatitude() + ", " + location.getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Ubicación actual"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-                    }
-                }
-            }
-        };
-
-        searchBar = findViewById(R.id.search_bar);
-        searchButton = findViewById(R.id.search_button);
-        toggleMapButton = findViewById(R.id.toggle_map_button);
-
-        searchButton.setOnClickListener(view -> searchRestaurantsNearby());
-        toggleMapButton.setOnClickListener(view -> toggleMapType());
+        clienteUbicacion = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mapaGoogle = googleMap;
+        clienteUbicacion = LocationServices.getFusedLocationProviderClient(this);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-
-            LocationRequest locationRequest = LocationRequest.create()
-                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(5000)
-                    .setFastestInterval(2000);
-
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-        } else {
-            requestLocationPermission();
-        }
-    }
-
-    private void requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    private void searchRestaurantsNearby() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -141,81 +78,114 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-            if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                String url = "https://api.foursquare.com/v3/places/search?query=restaurant&ll=" + latitude + "," + longitude + "&radius=5000";
-
-                Log.d("API_URL", "URL de la solicitud: " + url);
-
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                        response -> {
-                            try {
-                                JSONArray results = response.getJSONArray("results");
-
-                                for (Marker marker : markers) {
-                                    marker.remove();
-                                }
-                                markers.clear();
-
-                                for (int i = 0; i < results.length(); i++) {
-                                    JSONObject place = results.getJSONObject(i);
-                                    String name = place.getString("name");
-                                    JSONObject locationObj = place.getJSONObject("geocodes").getJSONObject("main");
-                                    double lat = locationObj.getDouble("latitude");
-                                    double lon = locationObj.getDouble("longitude");
-
-                                    LatLng placeLocation = new LatLng(lat, lon);
-                                    Log.d("ADDING_MARKER", "Agregando marcador: " + name + " en " + lat + ", " + lon);
-
-                                    Marker marker = mMap.addMarker(new MarkerOptions()
-                                            .position(placeLocation)
-                                            .title(name));
-
-                                    markers.add(marker);
-                                }
-
-                                if (!markers.isEmpty()) {
-                                    LatLng firstLocation = markers.get(0).getPosition();
-                                    Log.d("MOVING_CAMERA", "Centrando la cámara en: " + firstLocation.latitude + ", " + firstLocation.longitude);
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLocation, 15));
-                                } else {
-                                    Log.d("NO_MARKERS", "No se encontraron lugares cercanos.");
-                                    Toast.makeText(this, "No se encontraron restaurantes", Toast.LENGTH_SHORT).show();
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(this, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
-                            }
-                        }, error -> {
-                    Toast.makeText(this, "Error en la solicitud", Toast.LENGTH_SHORT).show();
-                    Log.e("API_ERROR", "Error en la solicitud: " + error.toString());
-                }) {
+        clienteUbicacion.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
-                    public Map<String, String> getHeaders() {
-                        Map<String, String> headers = new HashMap<>();
-                        headers.put("Authorization", "fsq3 " + FOURSQUARE_API_KEY); // Agregar espacio después de fsq3
-                        return headers;
+                    public void onSuccess(Location ubicacion) {
+                        if (ubicacion != null) {
+                            LatLng coordenadas = new LatLng(ubicacion.getLatitude(), ubicacion.getLongitude());
+                            if (marcadorUbicacion == null) {
+                                marcadorUbicacion = mapaGoogle.addMarker(new MarkerOptions()
+                                        .position(coordenadas)
+                                        .title("Mi Ubicación"));
+                            } else {
+                                marcadorUbicacion.setPosition(coordenadas);
+                            }
+                            mapaGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas, 15));
+                        }
                     }
-                };
-                requestQueue.add(request);
-            } else {
-                Toast.makeText(this, "No se pudo obtener la ubicación actual", Toast.LENGTH_SHORT).show();
+                });
+
+        botonBuscar.setOnClickListener(v -> buscarLugares(campoBusqueda.getText().toString()));
+        botonTipoMapa.setOnClickListener(v -> alternarTipoMapa());
+    }
+
+    private Bitmap convertirVectorABitmap(int recursoVector) {
+        VectorDrawableCompat drawableVector = VectorDrawableCompat.create(getResources(), recursoVector, null);
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawableVector.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawableVector.draw(canvas);
+        return bitmap;
+    }
+
+    private void buscarLugares(String tipoLugar) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+
+        clienteUbicacion.getLastLocation().addOnSuccessListener(this, ubicacion -> {
+            if (ubicacion != null) {
+                double lat = ubicacion.getLatitude();
+                double lng = ubicacion.getLongitude();
+                obtenerLugaresCercanos(lat, lng, tipoLugar);
             }
         });
     }
 
-    private void toggleMapType() {
-        if (mMap != null) {
-            if (isSatelliteView) {
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    private void alternarTipoMapa() {
+        if (mapaGoogle != null) {
+            if (mapaGoogle.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+                mapaGoogle.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
             } else {
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                mapaGoogle.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
-            isSatelliteView = !isSatelliteView;
         }
+    }
+
+    private void obtenerLugaresCercanos(double lat, double lng, String tipoLugar) {
+        new Thread(() -> {
+            try {
+                String urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
+                        "location=" + lat + "," + lng +
+                        "&radius=5000" +
+                        "&type=" + tipoLugar.toLowerCase() +
+                        "&key=" + CLAVE_API;
+
+                URL url = new URL(urlString);
+                HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
+                conexion.setRequestMethod("GET");
+
+                BufferedReader lector = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+                StringBuilder respuesta = new StringBuilder();
+                String linea;
+                while ((linea = lector.readLine()) != null) {
+                    respuesta.append(linea);
+                }
+                lector.close();
+
+                JSONObject jsonObject = new JSONObject(respuesta.toString());
+                JSONArray resultados = jsonObject.getJSONArray("results");
+
+                runOnUiThread(() -> {
+                    for (Marker marcador : listaMarcadores) {
+                        marcador.remove();
+                    }
+                    listaMarcadores.clear();
+
+                    for (int i = 0; i < resultados.length(); i++) {
+                        try {
+                            JSONObject lugar = resultados.getJSONObject(i);
+                            String nombre = lugar.getString("name");
+                            JSONObject ubicacion = lugar.getJSONObject("geometry").getJSONObject("location");
+                            double latLugar = ubicacion.getDouble("lat");
+                            double lngLugar = ubicacion.getDouble("lng");
+
+                            Marker marcador = mapaGoogle.addMarker(new MarkerOptions()
+                                    .position(new LatLng(latLugar, lngLugar))
+                                    .title(nombre));
+                            listaMarcadores.add(marcador);
+                        } catch (Exception e) {
+                            Log.e("ErrorMapa", "Error procesando lugar", e);
+                        }
+                    }
+                    mapaGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 14));
+                });
+
+            } catch (Exception e) {
+                Log.e("ErrorMapa", "Error obteniendo lugares", e);
+            }
+        }).start();
     }
 }
